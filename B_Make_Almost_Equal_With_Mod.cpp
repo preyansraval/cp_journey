@@ -8,31 +8,20 @@ int main() {
     while(t--) {
         int n;
         cin >> n;
-        vector<int> a(n);
+        vector<ll> a(n);
         for(auto &i : a)
             cin >> i;
         ll ans = 0;
-        for(int i = 0;i <= 57;i++) {
-            ll k = (1ll << i);
-            bool flag = true;
-            ll firstVal = -1ll, secondVal = -1ll;
-            for(int j = 0;j < n;j++) {
-                ll val = a[j] % k;
-                if(firstVal == -1)  firstVal = val;
-                if(firstVal != val) {
-                    if(secondVal == -1) secondVal = val;
-                    if(secondVal != val) {
-                        flag = false;
-                        break;
-                    }
-                }
-            }
-            if(secondVal == -1ll) {
-                flag = false;
-            }
 
-            if(flag) {
-                ans = k;
+        for(ll k = 1;k <= 60;k++) {
+            ll val = (1ll << k);
+            set<ll> freq;
+            for(int i = 0;i < n;i++) {
+                ll bit = (a[i] % val);
+                freq.insert(bit);
+            }
+            if(freq.size() == 2) {
+                ans = val;
                 break;
             }
         }

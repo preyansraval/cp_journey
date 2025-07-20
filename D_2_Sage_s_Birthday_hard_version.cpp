@@ -2,6 +2,18 @@
 using namespace std;
 typedef long long ll;
 
+bool checker(vector<ll> arr, ll mid) {
+
+    int i = mid - 1, j = arr.size() - 1;
+    while(i >= 0 && j > 0) {
+        if(arr[i] >= arr[j] || arr[i] >= arr[j-1])
+            return false;
+        i--;
+        j--;
+    }
+    return true;
+}
+
 int main() {
     ll n;
     cin >> n;
@@ -12,42 +24,32 @@ int main() {
     
     sort(arr.begin(), arr.end());
 
-    if(n <= 2) {
-        cout << 0 << "\n";
-        for(auto a : arr)
-            cout << a << " ";
-        return 0;
+    ll lo = 0, hi = ((n+1)/2) - 1;
+    ll ans = 0;
+    while(lo <= hi) {
+        ll mid = lo + (hi - lo)/2;
+
+        if(checker(arr, mid)) {
+            ans = mid;
+            lo = mid+1;
+        }
+        else {
+            hi = mid - 1;
+        }
     }
 
-    ll count = 0;
-    ll i = 0, j = n-1;
-    while(i < j && arr[i] < arr[j]) {
-        i++;
-        j--;
-        count++;
-    }
-
-    vector<ll> res(n);
-    ll odd = 1, even = 0;
-    for(ll x = 0;x < count && odd < n; x++) {
-        res[odd] = arr[x];
-        odd += 2;
-    }
-
-    ll y = count;
-    while(y < n && even < odd) {
-        res[even] = arr[y];
-        even += 2;
-        y++;
-    }
+    cout << ans << "\n";
     
-    while(y < n && odd < n-1) {
-        res[odd+1] = arr[y];
-        y++;
-        odd++;
+    vector<ll> res(n);
+    int i = n-1, j = ans - 1;
+    for(int k = 0;k < n;k++) {
+        if(k%2 == 0 || j == -1)
+            res[k] = arr[i--];
+        else
+            res[k] = arr[j--];
     }
 
-    cout << count << "\n";
     for(auto r : res)
         cout << r << " ";
+    cout << "\n";
 }
